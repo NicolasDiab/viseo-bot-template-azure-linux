@@ -24,7 +24,7 @@
         ],
         "defaultValue": "B1",
         "metadata": {
-          "description": "The pricing tier for the hosting plan. For any tier >=B1 Always on will be activated."
+          "description": "The pricing tier for the hosting plan"
         }
       },
       "workerSize": {
@@ -69,18 +69,6 @@
       }
     },
     "variables": {
-      "alwaysOnValue": {
-        "B1": "true",
-        "B2": "true",
-        "B3": "true",
-        "S1": "true",
-        "S2": "true",
-        "S3": "true",
-        "P1": "true",
-        "P2": "true",
-        "P3": "true",
-        "P4": "true"
-      },
       "servicePlanName": "[concat('serviceplan',uniqueString(resourceGroup().id))]"
     },
     "resources": [
@@ -124,7 +112,7 @@
               "displayName": "appSettings"
             },
             "properties": {
-              "DOCKER_CUSTOM_IMAGE_NAME": "sjkp/node-red-docker-azurewebapp",
+              "DOCKER_CUSTOM_IMAGE_NAME": "dockerregistryviseo.azurecr.io/node-red-docker-azurewebapp",
               "WEBSITES_ENABLE_APP_SERVICE_STORAGE": "true",
               "WEBSITE_PORT": "1880"
             }
