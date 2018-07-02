@@ -1,13 +1,90 @@
 {
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
-    "parameters": {   
-      "appName": {
-        "defaultValue": "nodered - viseo",
-        "type": "string"
+    "parameters": {
+      "siteName": {
+        "type": "string",
+        "metadata": {
+          "description": "The name of the web app that you wish to create."
+        }
+      },
+      "sku": {
+        "type": "string",
+        "allowedValues": [
+          "F1",
+          "D1",
+          "B1",
+          "B2",
+          "B3",
+          "S1",
+          "S2",
+          "S3",
+          "P1",
+          "P2",
+          "P3",
+          "P4"
+        ],
+        "defaultValue": "F1",
+        "metadata": {
+          "description": "The pricing tier for the hosting plan. For any tier >=B1 Always on will be activated."
+        }
+      },
+      "workerSize": {
+        "type": "string",
+        "allowedValues": [
+          "0",
+          "1",
+          "2"
+        ],
+        "defaultValue": "0",
+        "metadata": {
+          "description": "The instance size of the hosting plan (small, medium, or large)."
+        }
+      },
+      "nodeJsVersion": {
+        "type": "string",
+        "defaultValue": "8.9.4",
+        "metadata": {
+            "description": "Nodejs version, make sure that the App Service supports the version you set here."
+        }
+      },
+      "bot-secret": {
+        "type": "secureString",
+        "defaultValue": "your secret here",
+        "metadata": {
+            "description": "Secret used to decode node's encrypted config"
+        }
+      },
+      "bot-env": {
+        "type": "string",
+        "defaultValue": "dev",
+        "metadata": {
+            "description": "Key used to retrieve environement in conf/config.js"
+        }
+      },
+      "bot-host": {
+        "type": "string",
+        "defaultValue": "",
+        "metadata": {
+            "description": "External URL for the bot like https://your-bot.azurewebsites.net"
+        }
       }
     },
     "variables": {
+      "alwaysOnValue": {
+        "F1": "false",
+        "D1": "false",
+        "B1": "true",
+        "B2": "true",
+        "B3": "true",
+        "S1": "true",
+        "S2": "true",
+        "S3": "true",
+        "P1": "true",
+        "P2": "true",
+        "P3": "true",
+        "P4": "true"
+      },
       "servicePlanName": "[concat('serviceplan',uniqueString(resourceGroup().id))]"
     },
     "resources": [
@@ -17,8 +94,8 @@
         "apiVersion": "2016-03-01",
         "location": "[resourceGroup().location]",
         "sku": {
-          "name": "S1",
-          "capacity": 1
+          "name": "[parameters('sku')]",
+          "capacity": "[parameters('workerSize')]"
         },
         "kind": "linux",
         "properties": {
@@ -29,11 +106,11 @@
       },
       {
         "type": "Microsoft.Web/sites",
-        "name": "[parameters('appName')]",
+        "name": "[parameters('siteName')]",
         "apiVersion": "2016-03-01",
         "location": "[resourceGroup().location]",
         "properties": {
-          "name": "[parameters('appName')]",
+          "name": "[parameters('siteName')]",
           "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('servicePlanName'))]"
         },
         "dependsOn": [
@@ -45,7 +122,7 @@
             "type": "config",
             "apiVersion": "2016-03-01",
             "dependsOn": [
-              "[resourceId('Microsoft.Web/sites', parameters('appName'))]"
+              "[resourceId('Microsoft.Web/sites', parameters('siteName'))]"
             ],
             "tags": {
               "displayName": "appSettings"
@@ -54,6 +131,36 @@
               "DOCKER_CUSTOM_IMAGE_NAME": "sjkp/node-red-docker-azurewebapp",
               "WEBSITES_ENABLE_APP_SERVICE_STORAGE": "true",
               "WEBSITE_PORT": "1880"
+            }
+          },
+          {
+            "apiVersion": "2015-08-01",
+            "name": "logs",
+            "type": "config",
+            "dependsOn": [
+              "[resourceId('Microsoft.Web/Sites', parameters('siteName'))]"
+            ],
+            "tags": {
+              "displayName": "Logs"
+            },
+            "properties": {
+              "applicationLogs": {
+                "fileSystem": {
+                  "level": "Verbose"
+                }
+              },
+              "httpLogs": {
+                "fileSystem": {
+                  "retentionInMb": 40,
+                  "enabled": false
+                }
+              },
+              "failedRequestsTracing": {
+                "enabled": false
+              },
+              "detailedErrorMessages": {
+                "enabled": false
+              }
             }
           }
         ]

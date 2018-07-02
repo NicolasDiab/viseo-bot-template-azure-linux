@@ -3,13 +3,17 @@
 #RUN ln -s /home /data
 #ENV PORT=80
 #EXPOSE 80
-FROM node:6
+FROM node:8
+
 
 # Home directory for Node-RED application source code.
 RUN mkdir -p /usr/src/node-red
 
 # User data directory, contains flows, config and nodes.
 RUN mkdir -p /home/data
+
+
+RUN mkdir /home/data/testtttttt.txt
 
 WORKDIR /usr/src/node-red
 
