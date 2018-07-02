@@ -11,7 +11,6 @@
       "sku": {
         "type": "string",
         "allowedValues": [
-          "D1",
           "B1",
           "B2",
           "B3",
@@ -23,7 +22,7 @@
           "P3",
           "P4"
         ],
-        "defaultValue": "F1",
+        "defaultValue": "B1",
         "metadata": {
           "description": "The pricing tier for the hosting plan. For any tier >=B1 Always on will be activated."
         }
@@ -71,7 +70,6 @@
     },
     "variables": {
       "alwaysOnValue": {
-        "D1": "false",
         "B1": "true",
         "B2": "true",
         "B3": "true",
