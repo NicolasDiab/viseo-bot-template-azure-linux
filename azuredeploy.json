@@ -113,7 +113,7 @@
               "displayName": "appSettings"
             },
             "properties": {
-              "DOCKER_CUSTOM_IMAGE_NAME": "dockerregistryviseo/node-red-docker-azurewebapp",
+              "DOCKER_CUSTOM_IMAGE_NAME": "dockeridchatbot/viseo-bot-docker-azurewebapp",
               "WEBSITES_ENABLE_APP_SERVICE_STORAGE": "true",
               "WEBSITE_PORT": "1880"
             }
@@ -141,10 +141,10 @@
                 }
               },
               "failedRequestsTracing": {
-                "enabled": false
+                "enabled": true
               },
               "detailedErrorMessages": {
-                "enabled": false
+                "enabled": true
               }
             }
           }

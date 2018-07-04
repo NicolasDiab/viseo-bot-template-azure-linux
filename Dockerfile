@@ -5,7 +5,13 @@
 #EXPOSE 80
 FROM node:8
 
-
+ENV SSH_PASSWD "root:Docker!"
+RUN apt-get update \
+        && apt-get install -y --no-install-recommends dialog \
+        && apt-get update \
+  && apt-get install -y --no-install-recommends openssh-server \
+  && echo "$SSH_PASSWD" | chpasswd
+  
 # Home directory for Node-RED application source code.
 RUN mkdir -p /usr/src/node-red
 
@@ -14,6 +20,7 @@ RUN mkdir -p /home/data
 
 
 RUN mkdir /home/data/testtttttt.txt
+RUN mkdir /home/data/testtttt.txt
 
 WORKDIR /usr/src/node-red
 
