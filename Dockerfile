@@ -33,15 +33,18 @@ RUN cd /home/site/framework && npm install && \
 	cd /home/site/wwwroot/data && npm install
 
 # prepare nginx
+RUN rm -v /etc/nginx/sites-available/default
+RUN rm -v /etc/nginx/sites-enabled/default
+
 RUN ln -s /home/site/wwwroot/conf/nginx.conf /etc/nginx/sites-available/default && \
 	ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
 	#RUN mkdir /etc/nginx/ssl && mkdir /etc/nginx/ssl/certs
 
 # Remove the default Nginx configuration file
-RUN rm -v /etc/nginx/nginx.conf
+#RUN rm -v /etc/nginx/nginx.conf
 
 # Copy a configuration file from the current directory
-ADD bot/conf/nginx.conf /etc/nginx/
+#ADD bot/conf/nginx.conf /etc/nginx/
 
 # set working directory
 WORKDIR /home/site/wwwroot
