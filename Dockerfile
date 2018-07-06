@@ -41,6 +41,7 @@ WORKDIR /app/bot
 
 EXPOSE 80
 EXPOSE 443
+EXPOSE 1880
 
 VOLUME [ "/etc/nginx/ssl/certs" ]
 
