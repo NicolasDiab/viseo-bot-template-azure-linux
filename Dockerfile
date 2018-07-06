@@ -28,6 +28,7 @@ ADD viseo-bot-framework /home/site/framework
 ADD bot /home/site/wwwroot
 
 # npm install
+COPY package.json viseo-bot-template-azure-linux/viseo-bot-framework/package.json
 RUN cd /home/site/framework && npm install && \
 	cd /home/site/wwwroot/data && npm install
 
